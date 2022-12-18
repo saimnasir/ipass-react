@@ -7,8 +7,8 @@ export interface TenantModel extends BaseModel<string> {
  const TenantModelInit :TenantModel = {
       title: "", 
       id: "",
-      created: "",
-      updated: "",
+      createdAt: "",
+      updatedAt: "",
       logId: "",
       isExpanded: false
  }

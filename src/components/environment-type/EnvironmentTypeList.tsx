@@ -222,7 +222,7 @@ const EnvironmentTypeList = () => {
           setTimeout(() => {
             setAction(Action.None)
             setEnvironmentTypeModel(EnvironmentTypeModelInit)
-            setPagination({ ...pagination, sortBy: 'created', sortType: 'desc' })
+            setPagination({ ...pagination, sortBy: 'createdAt', sortType: 'desc' })
             loadTable()
             setLoading(false)
           }, 500)
