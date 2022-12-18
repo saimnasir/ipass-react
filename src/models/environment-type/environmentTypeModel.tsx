@@ -7,8 +7,8 @@ export interface EnvironmentTypeModel extends BaseModel<string> {
 const EnvironmentTypeModelInit : EnvironmentTypeModel = {
     title: "",
     id: "",
-    created: "",
-    updated: "",
+    createdAt: "",
+    updatedAt: "",
     logId: "",
     isExpanded: false
 }

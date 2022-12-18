@@ -9,8 +9,8 @@ const SetUserTenantInputModelInit: SetUserTenantInputModel = {
     userId: "",
     TenantIds: [],
     id: "",
-    created: "",
-    updated: "",
+    createdAt: "",
+    updatedAt: "",
     logId: "",
     isExpanded: false
 }

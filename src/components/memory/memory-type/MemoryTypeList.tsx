@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FinalResponse } from '../../../models/final-response'
-import { PaginationFilterModel, PaginationFilterModelInit } from '../../../models/paginationModel'
+import { PaginationTenantFilterModel, PaginationTenantFilterModelInit } from '../../../models/paginationModel'
 import {
   TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Box,
   SortDirection, TablePagination, Typography, Button
@@ -25,6 +25,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { SingleResponse } from '../../../models/single-response'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Action } from '../../../models/enums/Actions'
+import { useTenant } from '../../../context/TenantContext'
 
 const dataCells: readonly DataCell<MemoryTypeModel>[] = [
   {
@@ -91,31 +92,43 @@ function EnhancedTableHead(props: MemoryTypeModelEnhancedTableProps) {
 }
 
 const MemoryTypeList = () => {
+  const { tenant } = useTenant();
+
   const [loading, setLoading] = useState<boolean>(false)
   const [apiResponse, setApiResponse] = useState<any>()
   const [rows, setRows] = useState<MemoryTypeModel[]>([])
   const [totalItemCount, setTotalItemCount] = useState<number>(0)
   const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [pagination, setPagination] = useState<PaginationFilterModel>(PaginationFilterModelInit)
+
+  let initialPagination = PaginationTenantFilterModelInit;
+  initialPagination.tenantId = tenant;
+  const [pagination, setPagination] = useState<PaginationTenantFilterModel>(initialPagination)
+
   const [dense, setDense] = React.useState(false);
   const [memoryTypeModel, setMemoryTypeModel] = useState<MemoryTypeModel>(MemoryTypeModelInit)
   const [action, setAction] = useState<Action>(Action.None)
+
+  useEffect(() => {
+    setPagination({ ...pagination, tenantId: tenant })
+  }, [tenant])
 
   useEffect(() => {
     loadTable()
   }, [pagination])
 
   const loadTable = () => {
-    getMemoryTypes(pagination)
-      .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
-        setRows(response.data.data.data)
-        setTotalItemCount(response.data.data.totalCount)
-      })
-      .catch(err => {
-        console.log('error', err)
-      });
+    if (pagination.tenantId) {
+      getMemoryTypes(pagination)
+        .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
+          setRows(response.data.data.data)
+          setTotalItemCount(response.data.data.totalCount)
+        })
+        .catch(err => {
+          console.log('error', err)
+        });
+    }
   }
-  
+
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPagination({ ...pagination, page: newPage, })
   };
@@ -215,14 +228,14 @@ const MemoryTypeList = () => {
   }
 
   const onCreate = (formData: MemoryTypeModel) => {
-    createMemoryType(formData)
+    createMemoryType(formData, tenant)
       .then((response: AxiosResponse<FinalResponse<boolean>>) => {
         setApiResponse(response.data)
         if (response.data.success) {
           setTimeout(() => {
             setAction(Action.None)
             setMemoryTypeModel(MemoryTypeModelInit)
-            setPagination({ ...pagination, sortBy: 'created', sortType: 'desc' })
+            setPagination({ ...pagination, sortBy: 'createdAt', sortType: 'desc' })
             loadTable()
             setLoading(false)
           }, 500)
@@ -236,7 +249,8 @@ const MemoryTypeList = () => {
 
 
   const onSubmitHandler: SubmitHandler<MemoryTypeModel> = (formData) => {
-    setLoading(true)
+    setLoading(true) 
+    formData.tenantId = tenant;
     setMemoryTypeModel(formData)
     if (action === Action.Update) {
       onUpdate(formData)

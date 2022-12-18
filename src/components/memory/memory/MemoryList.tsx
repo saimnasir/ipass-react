@@ -3,7 +3,7 @@ import { createMemory, getMemories, getMemory, updateMemory } from '../../../net
 import { getMemoryTypes } from '../../../network/services/memoryTypeService'
 import MemoryModelInit, { MemoryModel } from '../../../models/memory/memory/memoryModel'
 import { FinalResponse } from '../../../models/final-response'
-import { PaginationDecodeModel, PaginationDecodeModelInit, PaginationFilterModelAllInit } from '../../../models/paginationModel'
+import { PaginationDecodeModel, PaginationDecodeModelInit, PaginationFilterModelAllInit, PaginationTenantFilterModelInit } from '../../../models/paginationModel'
 import {
   TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Box,
   SortDirection, TablePagination, IconButton, Typography, Stack
@@ -36,6 +36,8 @@ import { SubmitHandler } from 'react-hook-form'
 import MemoryEditor from './MemoryEditor'
 import PinCodeDialog from './PinCodeDialog'
 import { useTenant } from '../../../context/TenantContext'
+import { OrganizationModel } from '../../../models/organization/organization/organizationModel'
+import { EnvironmentTypeModel } from '../../../models/environment-type/environmentTypeModel'
 
 
 const dataCells: readonly DataCell<MemoryModel>[] = [
@@ -131,7 +133,7 @@ const dataCells: readonly DataCell<MemoryModel>[] = [
   },
 
   {
-    id: 'created',
+    id: 'createdAt',
     numeric: false,
     disablePadding: false,
     align: 'center',
@@ -209,7 +211,7 @@ const MemoryList = () => {
   const [totalItemCount, setTotalItemCount] = useState<number>(0)
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   let initialPagination = PaginationDecodeModelInit;
-  initialPagination.tenantKey = tenant;
+  initialPagination.tenantId = tenant;
   const [pagination, setPagination] = useState<PaginationDecodeModel>(initialPagination)
   const [dense, setDense] = React.useState(false);
 
@@ -242,7 +244,7 @@ const MemoryList = () => {
   }, [pagination, pinCodeChecked])
 
   useEffect(() => {
-    setPagination({ ...pagination, tenantKey: tenant })
+    setPagination({ ...pagination, tenantId: tenant })
   }, [tenant])
 
 
@@ -253,7 +255,10 @@ const MemoryList = () => {
   }
 
   const fetchMemoryTypes = () => {
-    getMemoryTypes(PaginationFilterModelAllInit)
+    
+  let memoryTypePagination = PaginationTenantFilterModelInit;
+  memoryTypePagination.tenantId = tenant;
+    getMemoryTypes(memoryTypePagination)
       .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
         let options = response.data.data.data.map((optionData) => {
           let option: IOptions = {
@@ -272,7 +277,7 @@ const MemoryList = () => {
 
   const fethOrganizations = () => {
     getOrganizations(PaginationFilterModelAllInit)
-      .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
+      .then((response: AxiosResponse<FinalResponse<ListResponse<OrganizationModel>>>) => {
         let options = response.data.data.data.map((optionData) => {
           let option: IOptions = {
             text: optionData.title,
@@ -290,7 +295,7 @@ const MemoryList = () => {
 
   const fetchEnvironmentTypes = () => {
     getEnvironmentTypes(PaginationFilterModelAllInit)
-      .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
+      .then((response: AxiosResponse<FinalResponse<ListResponse<EnvironmentTypeModel>>>) => {
         let options = response.data.data.data.map((optionData) => {
           let option: IOptions = {
             text: optionData.title,
@@ -361,7 +366,7 @@ const MemoryList = () => {
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   useEffect(() => {
-    if (pagination.tenantKey) {
+    if (pagination.tenantId) {
       getMemories(pagination)
         .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>) => {
           setRows(response.data.data.data)
@@ -476,7 +481,7 @@ const MemoryList = () => {
           setTimeout(() => {
             setAction(Action.None)
             // setMemoryModel(MemoryModelInit)
-            setPagination({ ...pagination, sortBy: 'created', sortType: 'desc' })
+            setPagination({ ...pagination, sortBy: 'createdAt', sortType: 'desc' })
             setLoading(false)
           }, 500)
         }
@@ -488,8 +493,8 @@ const MemoryList = () => {
   }
 
   const onSubmitHandler: SubmitHandler<MemoryModel> = (formData) => {
-    setLoading(true)
-    setMemoryModel({...formData, tenantId: tenant})
+    setLoading(true)  
+    setMemoryModel(formData)
     if (action === Action.Update) {
       onUpdate(formData)
     } else if (action === Action.Create) {

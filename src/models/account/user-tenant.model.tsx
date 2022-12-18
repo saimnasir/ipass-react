@@ -9,8 +9,8 @@ const UserTenantModelInit: UserTenantModel = {
     userId: "",
     tenantId: "",
     id: "",
-    created: "",
-    updated: "",
+    createdAt: "",
+    updatedAt: "",
     logId: "",
     isExpanded: false
 }

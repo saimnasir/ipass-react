@@ -37,8 +37,8 @@ export interface MemoryModel extends BaseModel<string> {
     description: "",
     active: false,
     id: "",
-    created: "",
-    updated: "",
+    createdAt: "",
+    updatedAt: "",
     logId: "",
     tenantId: "",
     isExpanded: false

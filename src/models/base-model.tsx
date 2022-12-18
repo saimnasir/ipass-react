@@ -1,7 +1,7 @@
 export interface BaseModel<T> { 
     id: T;
-    created: string;
-    updated: string; 
+    createdAt: string;
+    updatedAt: string; 
     logId: string;
     isExpanded:boolean
 }

@@ -124,7 +124,7 @@ const dataCells: readonly DataCell<MemoryModel>[] = [
     },
 
     {
-        id: 'created',
+        id: 'createdAt',
         numeric: false,
         disablePadding: false,
         align: 'center',

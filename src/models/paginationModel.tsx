@@ -7,17 +7,29 @@ export interface PaginationModel {
     pageSize: number,
 }
 
-export interface PaginationFilterModel extends PaginationModel {
+export interface SearchText{
+    searchText?: string, 
+}
+
+export interface MultiTenant{
+    tenantId: string
+}
+export interface Decode{
+    decode?: boolean  
+}
+export interface PaginationFilterModel extends PaginationModel, SearchText { 
+}
+
+export interface PaginationTenantFilterModel extends PaginationModel, SearchText, MultiTenant {
     searchText?: string,
 }
 
-export interface PaginationDecodeModel extends PaginationFilterModel {
-    decode?: boolean,
-    tenantKey: string  
+export interface PaginationDecodeModel extends PaginationModel, SearchText, Decode, MultiTenant {
+    decode?: boolean  
 }
 
 const PaginationDecodeModelInit: PaginationDecodeModel = {
-    tenantKey: '',
+    tenantId: '',
     page: 0,
     pageSize: 10,
     sortBy: '',
@@ -26,7 +38,7 @@ const PaginationDecodeModelInit: PaginationDecodeModel = {
 }
 
 const PaginationDecodeModelInitForHistory: PaginationDecodeModel = {
-    tenantKey: '',
+    tenantId: '',
     page: 0,
     pageSize: 4,
     sortBy: '',
@@ -34,7 +46,15 @@ const PaginationDecodeModelInitForHistory: PaginationDecodeModel = {
     decode: true
 }
 
-const PaginationFilterModelInit: PaginationFilterModel = {
+const PaginationFilterModelInit: PaginationFilterModel = { 
+    page: 0,
+    pageSize: 10,
+    sortBy: '',
+    sortType: 'asc'
+}
+
+const PaginationTenantFilterModelInit: PaginationTenantFilterModel = { 
+    tenantId: '',
     page: 0,
     pageSize: 10,
     sortBy: '',
@@ -42,11 +62,11 @@ const PaginationFilterModelInit: PaginationFilterModel = {
 }
 
 
-const PaginationFilterModelAllInit: PaginationFilterModel = {
+const PaginationFilterModelAllInit: PaginationFilterModel = { 
     page: 0,
     pageSize: 9999,
     sortBy: 'title',
     sortType: 'asc',
 }
 
-export { PaginationDecodeModelInit, PaginationDecodeModelInitForHistory, PaginationFilterModelInit, PaginationFilterModelAllInit }
+export { PaginationTenantFilterModelInit, PaginationDecodeModelInit, PaginationDecodeModelInitForHistory, PaginationFilterModelInit, PaginationFilterModelAllInit }

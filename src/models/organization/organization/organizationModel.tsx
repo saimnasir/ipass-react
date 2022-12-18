@@ -18,8 +18,8 @@ const OrganizationModelInit :OrganizationModel = {
     organizationTypeId: "",
     parentOrganizationId: "",
     id: "",
-    created: "",
-    updated: "",
+    createdAt: "",
+    updatedAt: "",
     logId: "",
     isExpanded: false
 }

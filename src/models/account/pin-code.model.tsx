@@ -9,8 +9,8 @@ export interface PinCodeModel extends BaseModel<string> {
       code: "",
       active: false,
       id: "",
-      created: "",
-      updated: "",
+      createdAt: "",
+      updatedAt: "",
       logId: "",
       isExpanded: false
  }

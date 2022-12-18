@@ -221,7 +221,7 @@ const OrganizationTypeList = () => {
           setTimeout(() => {
             setAction(undefined)
             setOrganizationTypeModel(OrganizationTypeModelInit)
-            setPagination({ ...pagination, sortBy: 'created', sortType: 'desc' })
+            setPagination({ ...pagination, sortBy: 'createdAt', sortType: 'desc' })
             loadTable()
             setLoading(false)
           }, 500)

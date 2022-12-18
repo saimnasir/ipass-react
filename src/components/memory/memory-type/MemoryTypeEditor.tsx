@@ -13,7 +13,8 @@ import { Action } from '../../../models/enums/Actions';
 const formData = z.object({
     id: string(),
     title: string().trim().min(1, 'Title is required'),
-    active: boolean().default(true)
+    active: boolean().default(true),    
+    //tenantId: string()
 });
 
 
