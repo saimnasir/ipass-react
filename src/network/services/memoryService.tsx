@@ -8,7 +8,8 @@ import { ListResponse } from '../../models/list-response';
 import { SingleResponse } from "../../models/single-response";
 
 export const getMemories = async (pagination: PaginationDecodeModel): Promise<AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>> => {
-    return await http.get<any, AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>>("/memories", { params: pagination });
+    console.log('pagination', pagination)
+    return await http.get<any, AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>>(`/memories`, { params: pagination });
 };
 
 export const getMemoryHistory = async (pagination: PaginationDecodeModel, id: string): Promise<AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>> => {

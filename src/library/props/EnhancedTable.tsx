@@ -1,5 +1,6 @@
 
 import { SortDirection } from '@mui/material'
+import { TenantModel } from '../../models/account/tenant';
 import { EnvironmentTypeModel } from '../../models/environment-type/environmentTypeModel';
 import { MemoryTypeModel } from '../../models/memory/memory-type/memoryTypeModel';
 import { MemoryModel } from '../../models/memory/memory/memoryModel';
@@ -51,6 +52,17 @@ export interface OrganizationTypeModelEnhancedTableProps {
 export interface EnvironmentTypeModelEnhancedTableProps {
     numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof EnvironmentTypeModel) => void;
+    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onOpenEditor: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    order: SortDirection;
+    orderBy: string;
+    rowCount: number;
+}
+
+
+export interface TenantModelEnhancedTableProps {
+    numSelected: number;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TenantModel) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onOpenEditor: (event: React.MouseEvent<HTMLButtonElement>) => void;
     order: SortDirection;

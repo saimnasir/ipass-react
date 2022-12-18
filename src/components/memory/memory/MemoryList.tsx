@@ -35,6 +35,7 @@ import { SingleResponse } from '../../../models/single-response'
 import { SubmitHandler } from 'react-hook-form'
 import MemoryEditor from './MemoryEditor'
 import PinCodeDialog from './PinCodeDialog'
+import { useTenant } from '../../../context/TenantContext'
 
 
 const dataCells: readonly DataCell<MemoryModel>[] = [
@@ -202,10 +203,14 @@ function EnhancedTableHead(props: MemoryModelEnhancedTableProps) {
 const MemoryList = () => {
   const navigate = useNavigate();
 
+  const { tenant } = useTenant();
+
   const [rows, setRows] = useState<MemoryModel[]>([])
   const [totalItemCount, setTotalItemCount] = useState<number>(0)
   const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [pagination, setPagination] = useState<PaginationDecodeModel>(PaginationDecodeModelInit)
+  let initialPagination = PaginationDecodeModelInit;
+  initialPagination.tenantKey = tenant;
+  const [pagination, setPagination] = useState<PaginationDecodeModel>(initialPagination)
   const [dense, setDense] = React.useState(false);
 
   const [memoryTypes, setMemoryTypes] = useState<IOptions[]>([])
@@ -219,7 +224,6 @@ const MemoryList = () => {
   const [pinCodeChecked, setPinCodeChecked] = useState<boolean>(false)
   const [pinCodeExpiration, setPinCodeExpiration] = useState<number>(1) // mins    
   const [dateOfExpiration, setDateOfExpiration] = useState(new Date().getTime())
-
 
   useEffect(() => {
     const duration = (60000 * pinCodeExpiration)
@@ -236,6 +240,11 @@ const MemoryList = () => {
   useEffect(() => {
     loadTable()
   }, [pagination, pinCodeChecked])
+
+  useEffect(() => {
+    setPagination({ ...pagination, tenantKey: tenant })
+  }, [tenant])
+
 
   const loadTable = () => {
     fetchMemoryTypes()
@@ -297,6 +306,7 @@ const MemoryList = () => {
 
   }
 
+
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPagination({ ...pagination, page: newPage, })
   };
@@ -351,14 +361,16 @@ const MemoryList = () => {
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   useEffect(() => {
-    getMemories(pagination)
-      .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>) => {
-        setRows(response.data.data.data)
-        setTotalItemCount(response.data.data.totalCount)
-      })
-      .catch(err => {
-        console.log('error', err)
-      });
+    if (pagination.tenantKey) {
+      getMemories(pagination)
+        .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryModel>>>) => {
+          setRows(response.data.data.data)
+          setTotalItemCount(response.data.data.totalCount)
+        })
+        .catch(err => {
+          console.log('error', err)
+        });
+    }
   }, [pagination])
 
   const getCellValue = (rowData: MemoryModel, cell: DataCell<MemoryModel>, value: string | boolean | undefined) => {
@@ -406,7 +418,6 @@ const MemoryList = () => {
 
   const toggleExpandedAll = (event: React.MouseEvent<HTMLButtonElement>) => {
     const newExpandAll = !expandAll
-    console.log('toggleExpandedAll', { expandAll, newExpandAll })
     setExpandAll(newExpandAll)
   };
 
@@ -464,7 +475,7 @@ const MemoryList = () => {
         if (response.data.success) {
           setTimeout(() => {
             setAction(Action.None)
-            setMemoryModel(MemoryModelInit)
+            // setMemoryModel(MemoryModelInit)
             setPagination({ ...pagination, sortBy: 'created', sortType: 'desc' })
             setLoading(false)
           }, 500)
@@ -478,7 +489,7 @@ const MemoryList = () => {
 
   const onSubmitHandler: SubmitHandler<MemoryModel> = (formData) => {
     setLoading(true)
-    setMemoryModel(formData)
+    setMemoryModel({...formData, tenantId: tenant})
     if (action === Action.Update) {
       onUpdate(formData)
     } else if (action === Action.Create) {

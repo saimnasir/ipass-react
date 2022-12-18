@@ -15,7 +15,7 @@ import LoginApp from './components/account/LoginApp';
 import NewMemory from './components/memory/memory/NewMemory'; 
 import EnvironmentTypeList from './components/environment-type/EnvironmentTypeList';
 import NewEnvironmentType from './components/environment-type/EnvironmentTypeEditor';
-import EnvironmentApp from './components/memory/EnvironmentApp';
+import EnvironmentApp from './components/environment-type/EnvironmentApp';
 import OrganizationApp from './components/organization/OrganizationApp';
 import OrganizationList from './components/organization/organization/OrganizationList';
 import OrganizationTypeList from './components/organization/organization-type/OrganizationTypeList';
@@ -26,6 +26,8 @@ import MemoryHistory from './components/memory/memory/MemoryHistory';
 import EditMemory from './components/memory/memory/EditMemory';
 import ReadMemory from './components/memory/memory/ReadMemory';
 import { useAuth } from './context/AuthContext'; 
+import TenantApp from './components/tenant/TenantApp';
+import TenantList from './components/tenant/TenantList';
 
 
 function App() {
@@ -86,6 +88,10 @@ function App() {
 
               <Route path="environment-type" element={<EnvironmentApp />}>
                 <Route index element={<EnvironmentTypeList />} />
+              </Route>
+
+              <Route path="tenants" element={<TenantApp />}>
+                <Route index element={<TenantList />} />
               </Route>
 
             </Routes>

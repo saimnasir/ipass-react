@@ -13,9 +13,11 @@ export interface PaginationFilterModel extends PaginationModel {
 
 export interface PaginationDecodeModel extends PaginationFilterModel {
     decode?: boolean,
+    tenantKey: string  
 }
 
 const PaginationDecodeModelInit: PaginationDecodeModel = {
+    tenantKey: '',
     page: 0,
     pageSize: 10,
     sortBy: '',
@@ -24,6 +26,7 @@ const PaginationDecodeModelInit: PaginationDecodeModel = {
 }
 
 const PaginationDecodeModelInitForHistory: PaginationDecodeModel = {
+    tenantKey: '',
     page: 0,
     pageSize: 4,
     sortBy: '',

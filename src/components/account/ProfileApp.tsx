@@ -9,6 +9,7 @@ import { AxiosResponse } from 'axios';
 import { FinalResponse } from '../../models/final-response';
 import { SingleResponse } from '../../models/single-response';
 import { ProfileModel } from '../../models/account/user.model';
+import MyTenants from './MyTenants';
 
 const ProfileApp = () => {
 
@@ -62,13 +63,17 @@ const ProfileApp = () => {
           >
             <Tab label='Profile' value='Profile' sx={{ alignContent: 'center' }} />
             <Tab label='Pin Code' value='PinCode' sx={{ alignContent: 'center' }} />
+            <Tab label='My Tenants' value='Tenants' sx={{ alignContent: 'center' }} />
           </TabList>
           <Divider color='primary'></Divider>
           <TabPanel value="Profile" >
             <EditProfile profile={profile} setProfile={setProfile} />
           </TabPanel>
           <TabPanel value="PinCode" >
-            <EditPinCode profile={profile} setProfile={setProfile}  />
+            <EditPinCode profile={profile} setProfile={setProfile} />
+          </TabPanel>
+          <TabPanel value="Tenants" >
+            <MyTenants userId={profile.user.id}/>
           </TabPanel>
 
         </TabContext>) : (

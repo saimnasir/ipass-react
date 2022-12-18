@@ -91,6 +91,21 @@ const unSortedMenues: IPassMenu[] = [
             childs: []
         }
         ]
+    },
+    {
+        order: 5,
+        title: 'Tenants',
+        path: 'tenants',
+        showOnToolbar: false,
+        childs: [{
+            order: 1,
+            title: 'Tenants',
+            path: '',
+            description: '',
+            showOnToolbar: true,
+            childs: []
+        }
+        ]
     }
 ];
 const menus: readonly IPassMenu[] = unSortedMenues.sort((a, b) => (a.order < b.order) ? -1 : 1);
