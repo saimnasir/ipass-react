@@ -38,7 +38,8 @@ const formDataBase = z.object({
         .min(8, 'Password must be more than 8 characters')
         .max(32, 'Password must be less than 32 characters'),
     description: string().nullable(),
-    active: boolean().default(true),
+    active: boolean().default(true),    
+    tenantId: string()
 });
 
 const formData = formDataBase.extend({

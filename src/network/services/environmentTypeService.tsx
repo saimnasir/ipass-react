@@ -1,13 +1,13 @@
 
 import { http } from "../http";
 import { FinalResponse } from '../../models/final-response';
- import { PaginationDecodeModel } from '../../models/paginationModel';
+ import { PaginationDecodeModel, PaginationFilterModel } from '../../models/paginationModel';
 import { AxiosResponse } from 'axios';
 import { ListResponse } from '../../models/list-response'; 
 import { EnvironmentTypeModel } from "../../models/environment-type/environmentTypeModel";
 import { SingleResponse } from "../../models/single-response";
 
-export const getEnvironmentTypes = async (pagination: PaginationDecodeModel): Promise<AxiosResponse<FinalResponse<ListResponse<EnvironmentTypeModel>>>> => {
+export const getEnvironmentTypes = async (pagination: PaginationFilterModel): Promise<AxiosResponse<FinalResponse<ListResponse<EnvironmentTypeModel>>>> => {
     return await http.get<any, AxiosResponse<FinalResponse<ListResponse<EnvironmentTypeModel>>>>("/environmentTypes", { params: pagination });
 };
  

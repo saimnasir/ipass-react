@@ -16,6 +16,7 @@ export interface MemoryModel extends BaseModel<string> {
     description: string| undefined;
     active: boolean;
     confirmPassword: string;
+    tenantId: string;
 }
 
  const MemoryModelInit :MemoryModel = {
@@ -39,6 +40,7 @@ export interface MemoryModel extends BaseModel<string> {
     created: "",
     updated: "",
     logId: "",
+    tenantId: "",
     isExpanded: false
 }
 

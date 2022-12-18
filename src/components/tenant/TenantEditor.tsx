@@ -1,46 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, DialogProps, Typography } from '@mui/material'
 import Box from "@mui/material/Box";
-import { MemoryTypeModel } from "../../../models/memory/memory-type/memoryTypeModel";
-import { z, boolean, string, } from 'zod';
+ import { z, boolean, string, } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, FormProvider, useForm } from 'react-hook-form';
-import FormInput from "../../../context/FormInput";
+import FormInput from "../../context/FormInput";
 import { LoadingButton } from "@mui/lab";
 import SaveIcon from '@mui/icons-material/Save'
-import { Action } from '../../../models/enums/Actions';
+import { TenantModel } from '../../models/account/tenant';
+import { Action } from '../../models/enums/Actions';
 
 const formData = z.object({
     id: string(),
     title: string().trim().min(1, 'Title is required'),
     active: boolean().default(true)
-});
+  });  
 
-
-type IMemoryTypeEditorProps = {
-    memoryTypeModel: MemoryTypeModel,
-    onSubmitHandler: SubmitHandler<MemoryTypeModel>,
+type ITenantEditorProps = {
+    tenantModel: TenantModel,
+    onSubmitHandler: SubmitHandler<TenantModel>,
     onHandleClose: () => void,
     loading: boolean,
     action: Action
 } & DialogProps;
 
-
 const getTitle = (action: Action) => { 
     if (action == Action.Create) {
-        return 'Create Memory Type'
+        return 'Create Tenant'
     }
     else if (action == Action.Update) {
-        return 'Update Memory Type'
+        return 'Update Tenant'
     } else if (action == Action.Delete) {
-        return 'Delete Memory Type'
+        return 'Delete Tenant'
     }
-    return 'Memory Type'
+    return 'Tenant'
 }
-
-const MemoryTypeEditor: React.FC<IMemoryTypeEditorProps> = ({ action, open, onHandleClose, memoryTypeModel, onSubmitHandler, loading }) => {
+ 
+const TenantEditor: React.FC<ITenantEditorProps> = ({ action, open, onHandleClose, tenantModel, onSubmitHandler, loading }) => {
     const [dialogTitle, setDialogTitle] = useState<string>('')
-    const methods = useForm<MemoryTypeModel>({
+    const methods = useForm<TenantModel>({
         resolver: zodResolver(formData),
     });
 
@@ -57,9 +55,9 @@ const MemoryTypeEditor: React.FC<IMemoryTypeEditorProps> = ({ action, open, onHa
     }, [isSubmitSuccessful]);
 
     useEffect(() => {
-        reset(memoryTypeModel);
+        reset(tenantModel);
         setDialogTitle(getTitle(action))
-    }, [memoryTypeModel]);
+    }, [tenantModel]);
 
     return (
         <>
@@ -71,12 +69,12 @@ const MemoryTypeEditor: React.FC<IMemoryTypeEditorProps> = ({ action, open, onHa
                 closeAfterTransition={true}
                 onClose={onHandleClose}
             >
-                <DialogTitle sx={{ alignContent: 'center' }}>
-                    <Typography sx={{ alignContent: 'center' }} component='h1'>
+                <DialogTitle sx={{ alignContent: 'center' }}> 
+                    <Typography   sx={{ alignContent: 'center' }} component='h1'>
                         {dialogTitle}</Typography>
                     {
-                        memoryTypeModel?.title && <Typography color='secondary' sx={{ alignContent: 'center' }} component='h4'>
-                            {memoryTypeModel.title} </Typography>
+                        tenantModel?.title && <Typography color='secondary' sx={{ alignContent: 'center' }} component='h4'>
+                            {tenantModel.title} </Typography>
                     }
                 </DialogTitle>
                 <DialogContent  >
@@ -122,4 +120,4 @@ const MemoryTypeEditor: React.FC<IMemoryTypeEditorProps> = ({ action, open, onHa
     )
 }
 
-export default MemoryTypeEditor
+export default TenantEditor
