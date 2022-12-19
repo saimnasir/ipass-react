@@ -122,6 +122,7 @@ const AppNavbar = () => {
                         }}
                         onChange={handleTenantChange}
                         value={tenant}
+                        disabled={myTenants?.length < 2}
                     >
                         {myTenants.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
