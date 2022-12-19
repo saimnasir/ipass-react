@@ -57,7 +57,7 @@ const PaginationTenantFilterModelInit: PaginationTenantFilterModel = {
     tenantId: '',
     page: 0,
     pageSize: 10,
-    sortBy: '',
+    sortBy: 'createdAt',
     sortType: 'asc'
 }
 

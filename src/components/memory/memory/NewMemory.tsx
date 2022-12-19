@@ -10,7 +10,7 @@ import { getOrganizations } from "../../../network/services/organizationService"
 import { getMemoryTypes } from "../../../network/services/memoryTypeService";
 import { getEnvironmentTypes } from "../../../network/services/environmentTypeService";
 import { OrganizationModel } from "../../../models/organization/organization/organizationModel";
-import { PaginationFilterModelAllInit } from "../../../models/paginationModel";
+import { PaginationFilterModelAllInit, PaginationTenantFilterModelInit } from "../../../models/paginationModel";
 import { AxiosResponse } from "axios";
 import { FinalResponse } from "../../../models/final-response";
 import { ListResponse } from "../../../models/list-response";
@@ -97,7 +97,7 @@ const NewMemory = () => {
 
     const fetchMemoryTypes = () => {
         if (memoryTypeOptions.length === 0) {
-            getMemoryTypes(PaginationFilterModelAllInit)
+            getMemoryTypes(PaginationTenantFilterModelInit)
                 .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
                     let options = response.data.data.data.map((optionData) => {
                         let option: IOptions = {

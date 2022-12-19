@@ -3,7 +3,7 @@ import { getMemoryHistory } from '../../../network/services/memoryService'
 import { getMemoryTypes } from '../../../network/services/memoryTypeService'
 import { MemoryModel } from '../../../models/memory/memory/memoryModel'
 import { FinalResponse } from '../../../models/final-response'
-import { PaginationDecodeModel, PaginationDecodeModelInitForHistory, PaginationFilterModelAllInit } from '../../../models/paginationModel'
+import { PaginationDecodeModel, PaginationDecodeModelInitForHistory, PaginationFilterModelAllInit, PaginationTenantFilterModelInit } from '../../../models/paginationModel'
 import {
     TableHead, TableRow, TableCell, Paper, Box,
     SortDirection, TablePagination, Button, IconButton, Typography, Stack, Skeleton
@@ -175,7 +175,7 @@ const MemoryHistory = () => {
 
     const fetchMemoryTypes = () => {
         if (memoryTypeOptions.length === 0) {
-            getMemoryTypes(PaginationFilterModelAllInit)
+            getMemoryTypes(PaginationTenantFilterModelInit)
                 .then((response: AxiosResponse<FinalResponse<ListResponse<MemoryTypeModel>>>) => {
                     let options = response.data.data.data.map((optionData) => {
                         let option: IOptions = {
